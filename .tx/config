@@ -1,0 +1,7 @@
+[main]
+host = https://www.transifex.com
+
+[bitcoinvg.qt-translation-021x]
+file_filter = src/qt/locale/bitcoinvg_<lang>.ts
+source_file = src/qt/locale/bitcoinvg_en.ts
+source_lang = en

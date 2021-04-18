@@ -1,0 +1,33 @@
+# /etc/conf.d/bitcoinvgd: config file for /etc/init.d/bitcoinvgd
+
+# Config file location
+#BITCOINVGD_CONFIGFILE="/etc/bitcoinvg/bitcoinvg.conf"
+
+# What directory to write pidfile to?  (created and owned by $BITCOINVGD_USER)
+#BITCOINVGD_PIDDIR="/var/run/bitcoinvgd"
+
+# What filename to give the pidfile
+#BITCOINVGD_PIDFILE="${BITCOINVGD_PIDDIR}/bitcoinvgd.pid"
+
+# Where to write bitcoinvgd data (be mindful that the blockchain is large)
+#BITCOINVGD_DATADIR="/var/lib/bitcoinvgd"
+
+# User and group to own bitcoinvgd process
+#BITCOINVGD_USER="bitcoinvg"
+#BITCOINVGD_GROUP="bitcoinvg"
+
+# Path to bitcoinvgd executable
+#BITCOINVGD_BIN="/usr/bin/bitcoinvgd"
+
+# Nice value to run bitcoinvgd under
+#BITCOINVGD_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+#BITCOINVGD_OPTS=""
+
+# The timeout in seconds OpenRC will wait for bitcoinvgd to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+BITCOINVGD_SIGTERM_TIMEOUT=600

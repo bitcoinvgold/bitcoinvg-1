@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+#
+#  bitcoinvgd The bitcoinvg core server.
+#
+#
+# chkconfig: 345 80 20
+# description: bitcoinvgd
+# processname: bitcoinvgd
+#
+
+# Source function library.
+. /etc/init.d/functions
+
+# you can override defaults in /etc/sysconfig/bitcoinvgd, see below
+if [ -f /etc/sysconfig/bitcoinvgd ]; then
+        . /etc/sysconfig/bitcoinvgd
+fi
+
+RETVAL=0
+
+prog=bitcoinvgd
+# you can override the lockfile via BITCOINVGD_LOCKFILE in /etc/sysconfig/bitcoinvgd
+lockfile=${BITCOINVGD_LOCKFILE-/var/lock/subsys/bitcoinvgd}
+
+# bitcoinvgd defaults to /usr/bin/bitcoinvgd, override with BITCOINVGD_BIN
+bitcoinvgd=${BITCOINVGD_BIN-/usr/bin/bitcoinvgd}
+
+# bitcoinvgd opts default to -disablewallet, override with BITCOINVGD_OPTS
+bitcoinvgd_opts=${BITCOINVGD_OPTS--disablewallet}
+
+start() {
+    echo -n $"Starting $prog: "
+    daemon $DAEMONOPTS $bitcoinvgd $bitcoinvgd_opts
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && touch $lockfile
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    killproc $prog -t600
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && rm -f $lockfile
+    return $RETVAL
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status $prog
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo "Usage: service $prog {start|stop|status|restart}"
+        exit 1
+        ;;
+esac

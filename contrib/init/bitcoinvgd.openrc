@@ -1,0 +1,92 @@
+#!/sbin/openrc-run
+
+# backward compatibility for existing gentoo layout 
+#
+if [ -d "/var/lib/bitcoinvg/.bitcoinvg" ]; then
+	BITCOINVGD_DEFAULT_DATADIR="/var/lib/bitcoinvg/.bitcoinvg"
+else
+	BITCOINVGD_DEFAULT_DATADIR="/var/lib/bitcoinvgd"
+fi
+
+BITCOINVGD_CONFIGFILE=${BITCOINVGD_CONFIGFILE:-/etc/bitcoinvg/bitcoinvg.conf}
+BITCOINVGD_PIDDIR=${BITCOINVGD_PIDDIR:-/var/run/bitcoinvgd}
+BITCOINVGD_PIDFILE=${BITCOINVGD_PIDFILE:-${BITCOINVGD_PIDDIR}/bitcoinvgd.pid}
+BITCOINVGD_DATADIR=${BITCOINVGD_DATADIR:-${BITCOINVGD_DEFAULT_DATADIR}}
+BITCOINVGD_USER=${BITCOINVGD_USER:-${BITCOINVG_USER:-bitcoinvg}}
+BITCOINVGD_GROUP=${BITCOINVGD_GROUP:-bitcoinvg}
+BITCOINVGD_BIN=${BITCOINVGD_BIN:-/usr/bin/bitcoinvgd}
+BITCOINVGD_NICE=${BITCOINVGD_NICE:-${NICELEVEL:-0}}
+BITCOINVGD_OPTS="${BITCOINVGD_OPTS:-${BITCOINVG_OPTS}}"
+
+name="BitcoinVG Core Daemon"
+description="BitcoinVG cryptocurrency P2P network daemon"
+
+command="/usr/bin/bitcoinvgd"
+command_args="-pid=\"${BITCOINVGD_PIDFILE}\" \
+		-conf=\"${BITCOINVGD_CONFIGFILE}\" \
+		-datadir=\"${BITCOINVGD_DATADIR}\" \
+		-daemon \
+		${BITCOINVGD_OPTS}"
+
+required_files="${BITCOINVGD_CONFIGFILE}"
+start_stop_daemon_args="-u ${BITCOINVGD_USER} \
+			-N ${BITCOINVGD_NICE} -w 2000"
+pidfile="${BITCOINVGD_PIDFILE}"
+
+# The retry schedule to use when stopping the daemon. Could be either
+# a timeout in seconds or multiple signal/timeout pairs (like
+# "SIGKILL/180 SIGTERM/300")
+retry="${BITCOINVGD_SIGTERM_TIMEOUT}"
+
+depend() {
+	need localmount net
+}
+
+# verify
+# 1) that the datadir exists and is writable (or create it)
+# 2) that a directory for the pid exists and is writable
+# 3) ownership and permissions on the config file
+start_pre() {
+	checkpath \
+	-d \
+	--mode 0750 \
+	--owner "${BITCOINVGD_USER}:${BITCOINVGD_GROUP}" \
+	"${BITCOINVGD_DATADIR}"
+
+	checkpath \
+	-d \
+	--mode 0755 \
+	--owner "${BITCOINVGD_USER}:${BITCOINVGD_GROUP}" \
+	"${BITCOINVGD_PIDDIR}"
+
+	checkpath -f \
+	-o ${BITCOINVGD_USER}:${BITCOINVGD_GROUP} \
+	-m 0660 \
+	${BITCOINVGD_CONFIGFILE}
+
+	checkconfig || return 1
+}
+
+checkconfig()
+{
+	if ! grep -qs '^rpcpassword=' "${BITCOINVGD_CONFIGFILE}" ; then
+		eerror ""
+		eerror "ERROR: You must set a secure rpcpassword to run bitcoinvgd."
+		eerror "The setting must appear in ${BITCOINVGD_CONFIGFILE}"
+		eerror ""
+		eerror "This password is security critical to securing wallets "
+		eerror "and must not be the same as the rpcuser setting."
+		eerror "You can generate a suitable random password using the following "
+		eerror "command from the shell:"
+		eerror ""
+		eerror "bash -c 'tr -dc a-zA-Z0-9 < /dev/urandom | head -c32 && echo'"
+		eerror ""
+		eerror "It is recommended that you also set alertnotify so you are "
+		eerror "notified of problems:"
+		eerror ""
+		eerror "ie: alertnotify=echo %%s | mail -s \"BitcoinVG Alert\"" \
+			"admin@foo.com"
+		eerror ""
+		return 1
+	fi
+}
