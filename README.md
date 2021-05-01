@@ -19,3 +19,20 @@ wow92
 
 Bitcoin Virtual Gold 2.0 Founder and Veteran Community Member.
 
+
+SUPPORT BVG!! Follow us and join our groups!
+
+
+Website: www.bitcoinvg.net
+
+
+Discord: https://discord.com/invite/YUgtB4d4
+
+
+Twitter: https://twitter.com/BitcoinVG
+
+
+Mining Pools: https://miningpoolstats.stream/bitcoinvg
+
+
+Telegram: https://t.me/BitcoinVG
