@@ -1,13 +1,13 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: BitcoinVG
+Upstream-Name: Bitcoin
 Upstream-Contact: Satoshi Nakamoto <satoshin@gmx.com>
- irc://#bitcoinvg@freenode.net
-Source: https://github.com/bitcoinvg/bitcoinvg
+ irc://#bitcoin@freenode.net
+Source: https://github.com/bitcoin/bitcoin
 
 Files: *
 Copyright: 2009-2020, Bitcoin Core Developers
 License: Expat
-Comment: The BitcoinVG Core Developers encompasses the current developers listed on bitcoinvg.org,
+Comment: The Bitcoin Core Developers encompasses the current developers listed on bitcoin.org,
          as well as the numerous contributors to the project.
 
 Files: debian/*
@@ -66,6 +66,11 @@ Files: src/qt/res/icons/tx_mined.png
 Copyright: Jonas Schnelli
 License: Expat
 
+Files: src/qt/res/icons/tx_cold.png
+Copyright: Icon made by bqlqn from www.flaticon.com
+License: Expat
+Comment: Site: https://www.flaticon.com/authors/bqlqn
+
 Files: src/qt/res/icons/clock*.png
        src/qt/res/icons/eye_*.png
        src/qt/res/icons/tx_in*.png
@@ -75,12 +80,12 @@ Copyright: Stephen Hutchings, Jonas Schnelli
 License: Expat
 Comment: Modifications of Stephen Hutchings' Typicons
 
-Files: src/qt/res/icons/bitcoinvg.*
-       share/pixmaps/bitcoinvg*
-       src/qt/res/src/bitcoinvg.svg
+Files: src/qt/res/icons/bitcoin.*
+       share/pixmaps/bitcoin*
+       src/qt/res/src/bitcoin.svg
 Copyright: Bitboy, Jonas Schnelli
 License: public-domain
-Comment: Site: https://bitcoinvgtalk.org/?topic=1756.0
+Comment: Site: https://bitcointalk.org/?topic=1756.0
 
 Files: src/qt/res/icons/proxy.png
        src/qt/res/src/proxy.svg

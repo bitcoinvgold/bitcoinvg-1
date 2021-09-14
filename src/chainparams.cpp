@@ -142,6 +142,13 @@ public:
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
         vSeeds.emplace_back("node1.walletbuilders.com");
+        vSeeds.emplace_back("seed1.bitcoinvg.org");
+        vSeeds.emplace_back("seed2.bitcoinvg.org");
+        vSeeds.emplace_back("seed3.bitcoinvg.org");
+        vSeeds.emplace_back("seed4.bitcoinvg.org");
+        vSeeds.emplace_back("23.94.198.107");
+        vSeeds.emplace_back("198.23.196.118");
+        vSeeds.emplace_back("23.94.200.124");
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,71);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,70);
@@ -160,15 +167,16 @@ public:
 
         checkpointData = {
             {
-                { 0, uint256S("0x00000036bd1b6fc73028bcb012419a71e719397d91614bc69f90b9677cd2956b")},
+                {      0, uint256S("0x00000036bd1b6fc73028bcb012419a71e719397d91614bc69f90b9677cd2956b")},
+                { 146665, uint256S("0x0000000000002671edea33f821c8f2bddf072e8e484c0213e40db2abe3551be7")},
             }
         };
 
         chainTxData = ChainTxData{
             // Data from RPC: getchaintxstats 4096 00000036bd1b6fc73028bcb012419a71e719397d91614bc69f90b9677cd2956b
-            /* nTime    */ 1618769419,
-            /* nTxCount */ 0,
-            /* dTxRate  */ 0,
+            /* nTime    */ 1631654675,
+            /* nTxCount */ 163416,
+            /* dTxRate  */ 0.0117827782060296,
         };
     }
 };

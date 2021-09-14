@@ -1,5 +1,5 @@
 ---
-name: "bitcoinvg-core-win-0.21"
+name: "bitcoinv-pos-core-win-0.21"
 enable_cache: true
 distro: "ubuntu"
 suites:
@@ -23,14 +23,14 @@ packages:
 - "ca-certificates"
 - "python3"
 remotes:
-- "url": "https://github.com/bitcoinvg/bitcoinvg.git"
-  "dir": "bitcoinvg"
+- "url": "https://github.com/BitcoinVBR/bitcoinV.git"
+  "dir": "bitcoinv-pos"
 files: []
 script: |
   set -e -o pipefail
 
   WRAP_DIR=$HOME/wrapped
-  HOSTS="x86_64-w64-mingw32"
+  HOSTS="x86_64-w64-mingw32 i686-w64-mingw32"
   CONFIGFLAGS="--enable-reduce-exports --disable-bench --disable-gui-tests"
   FAKETIME_HOST_PROGS="ar ranlib nm windres strip objcopy"
   FAKETIME_PROGS="date makensis zip"
@@ -94,7 +94,7 @@ script: |
   create_per-host_compiler_wrapper "2000-01-01 12:00:00"
   export PATH=${WRAP_DIR}:${PATH}
 
-  cd bitcoinvg
+  cd bitcoinv-pos
   BASEPREFIX="${PWD}/depends"
   # Build dependencies for each host
   for i in $HOSTS; do
@@ -122,6 +122,11 @@ script: |
   # Extract the git archive into a dir for each host and build
   for i in ${HOSTS}; do
     export PATH=${BASEPREFIX}/${i}/native/bin:${ORIGPATH}
+    if [ "${i}" = "x86_64-w64-mingw32" ]; then
+      SHORT_HOST="win64"
+    else
+      SHORT_HOST="win32"
+    fi    
     mkdir -p distsrc-${i}
     cd distsrc-${i}
     INSTALLPATH="${PWD}/installed/${DISTNAME}"
@@ -133,7 +138,7 @@ script: |
     make ${MAKEOPTS}
     make ${MAKEOPTS} -C src check-security
     make ${MAKEOPTS} -C src check-symbols
-    make deploy BITCOINVG_WIN_INSTALLER="${OUTDIR}/${DISTNAME}-win64-setup-unsigned.exe"
+    make deploy BITCOIN_WIN_INSTALLER="${OUTDIR}/${DISTNAME}-${SHORT_HOST}-setup-unsigned.exe"
     make install DESTDIR=${INSTALLPATH}
     cd installed
     mv ${DISTNAME}/bin/*.dll ${DISTNAME}/lib/
@@ -143,8 +148,8 @@ script: |
     find ${DISTNAME}/bin -type f -executable -print0 | xargs -0 -n1 -I{} ../contrib/devtools/split-debug.sh {} {} {}.dbg
     find ${DISTNAME}/lib -type f -print0 | xargs -0 -n1 -I{} ../contrib/devtools/split-debug.sh {} {} {}.dbg
     cp ../doc/README_windows.txt ${DISTNAME}/readme.txt
-    find ${DISTNAME} -not -name "*.dbg"  -type f | sort | zip -X@ ${OUTDIR}/${DISTNAME}-${i//x86_64-w64-mingw32/win64}.zip
-    find ${DISTNAME} -name "*.dbg"  -type f | sort | zip -X@ ${OUTDIR}/${DISTNAME}-${i//x86_64-w64-mingw32/win64}-debug.zip
+    find ${DISTNAME} -not -name "*.dbg"  -type f | sort | zip -X@ ${OUTDIR}/${DISTNAME}-${SHORT_HOST}.zip
+    find ${DISTNAME} -name "*.dbg"  -type f | sort | zip -X@ ${OUTDIR}/${DISTNAME}-${SHORT_HOST}-debug.zip
     cd ../../
     rm -rf distsrc-${i}
   done
@@ -152,5 +157,5 @@ script: |
   cp -rf contrib/windeploy $BUILD_DIR
   cd $BUILD_DIR/windeploy
   mkdir unsigned
-  cp ${OUTDIR}/${DISTNAME}-win64-setup-unsigned.exe unsigned/
+  cp ${OUTDIR}/${DISTNAME}-win*-setup-unsigned.exe unsigned/
   find . | sort | tar --mtime="$REFERENCE_DATETIME" --no-recursion --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 -c -T - | gzip -9n > ${OUTDIR}/${DISTNAME}-win-unsigned.tar.gz
