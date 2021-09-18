@@ -141,11 +141,11 @@ public:
         // This is fine at runtime as we'll fall back to using them as an addrfetch if they don't support the
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
-        vSeeds.emplace_back("node1.walletbuilders.com");
         vSeeds.emplace_back("seed1.bitcoinvg.org");
         vSeeds.emplace_back("seed2.bitcoinvg.org");
         vSeeds.emplace_back("seed3.bitcoinvg.org");
-        vSeeds.emplace_back("seed4.bitcoinvg.org");
+        vSeeds.emplace_back("seed4.bitcoinvg.net");
+        vSeeds.emplace_back("seed.bitcoinvg.org");
         vSeeds.emplace_back("23.94.198.107");
         vSeeds.emplace_back("198.23.196.118");
         vSeeds.emplace_back("23.94.200.124");
@@ -169,6 +169,7 @@ public:
             {
                 {      0, uint256S("0x00000036bd1b6fc73028bcb012419a71e719397d91614bc69f90b9677cd2956b")},
                 { 146665, uint256S("0x0000000000002671edea33f821c8f2bddf072e8e484c0213e40db2abe3551be7")},
+                { 150936, uint256S("0x00000000000002a0d6e31d7c1193201ca14afa348225394b4dc2b4db69d23d50")},                
             }
         };
 
