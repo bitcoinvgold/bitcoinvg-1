@@ -15,7 +15,7 @@
 #include <util/moneystr.h>
 
 #include <chainparams.h>
-#include <policy/pta.h>
+#include <policy/ptm.h>
 
 bool IsFinalTx(const CTransaction &tx, int nBlockHeight, int64_t nBlockTime)
 {
@@ -180,19 +180,19 @@ bool Consensus::CheckTxInputs(const CTransaction& tx, TxValidationState& state, 
         }
 
         // Check if COMMUNITY ADDRESS aka (Pay to All (PtA)) matured
-        if (nSpendHeight >= Params().PTAHeight) {
-            bool isPta = false;
-            const CScript& s = ptaAllowedScripts[0];
-            static const CAmount MIN_PTA = PTA_COINS_PER_BLOCK * COIN;
-            if ( (coin.out.scriptPubKey == s) && (coin.out.nValue >= MIN_PTA) ) {
-                isPta = true;
+        if (nSpendHeight >= Params().PTMHeight) {
+            bool isPtm = false;
+            const CScript& s = ptmAllowedScripts[0];
+            static const CAmount MIN_PTM = PTM_COINS_PER_BLOCK * COIN;
+            if ( (coin.out.scriptPubKey == s) && (coin.out.nValue >= MIN_PTM) ) {
+                isPtm = true;
             }
             
-            // If prev is PTA, check that it's matured
-            if (isPta) {                
-                if (nSpendHeight - coin.nHeight < PTA_MATURITY) {
+            // If prev is PTM, check that it's matured
+            if (isPtm) {                
+                if (nSpendHeight - coin.nHeight < PTM_MATURITY) {
                     return state.Invalid(TxValidationResult::TX_PREMATURE_SPEND, "bad-txns-premature-spend-of-pta",
-                        strprintf("tried to spend PTA at depth %d", nSpendHeight - coin.nHeight));
+                        strprintf("tried to spend PTM at depth %d", nSpendHeight - coin.nHeight));
                 }
             }
         }    

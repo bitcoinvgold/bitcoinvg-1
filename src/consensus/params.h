@@ -65,7 +65,7 @@ struct Params {
      * This prevents us from warning about the CSV and segwit activations. */
     int MinBIP9WarningHeight;
     /** Pay to All (PtA) Block height at which PoT becomes active */
-    int PTAHeight;    
+    int PTMHeight;    
     /**
      * Minimum blocks including miner confirmation of the total of 2016 blocks in a retargeting period,
      * (nPowTargetTimespan / nPowTargetSpacing) which is also used for BIP9 deployments.

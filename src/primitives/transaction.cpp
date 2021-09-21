@@ -13,7 +13,7 @@
 #include <assert.h>
 
 #include <chainparams.h>
-#include <policy/pta.h>
+#include <policy/ptm.h>
 
 std::string COutPoint::ToString() const
 {
@@ -100,16 +100,16 @@ CAmount CTransaction::GetValueOut() const
 
 bool CTransaction::IsPtA() const
 {
-    bool isPta = false;
-    const CScript& s = ptaAllowedScripts[0];    
+    bool isPtm = false;
+    const CScript& s = ptmAllowedScripts[0];    
     // Check for COMMUNITY addresses
     for (const auto& tx_out : vout) {
         if ((tx_out.scriptPubKey == s)) {
-            isPta = true;
+            isPtm = true;
             break;
         }
     }
-    return isPta;
+    return isPtm;
 }
 
 unsigned int CTransaction::GetTotalSize() const

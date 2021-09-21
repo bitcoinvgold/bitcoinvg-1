@@ -17,10 +17,10 @@ static const unsigned int MAX_BLOCK_WEIGHT = 4000000;
 static const int64_t MAX_BLOCK_SIGOPS_COST = 80000;
 /** Coinbase transaction outputs can only be spent after this number of new blocks (network rule) */
 static const int COINBASE_MATURITY = 10;
-// Pay to all address can only be spent after 500 confirmations
-static const int PTA_MATURITY = 500;
-// Pay to all address minimum pay is 1000 BVG per block
-static const int PTA_COINS_PER_BLOCK = 1000;
+// Pay to Mine address can only be spent after 50 confirmations
+static const int PTM_MATURITY = 50;
+// Pay to Mine address minimum pay is 1000 BVG per block
+static const int PTM_COINS_PER_BLOCK = 1000;
 
 static const int WITNESS_SCALE_FACTOR = 4;
 

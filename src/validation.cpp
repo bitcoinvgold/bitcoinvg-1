@@ -19,7 +19,7 @@
 #include <flatfile.h>
 #include <hash.h>
 #include <index/txindex.h>
-#include <policy/pta.h>
+#include <policy/ptm.h>
 #include <logging.h>
 #include <logging/timer.h>
 #include <node/ui_interface.h>
@@ -56,7 +56,7 @@
 #include <boost/algorithm/string/replace.hpp>
 
 #include <chainparams.h>
-#include <policy/pta.h>
+#include <policy/ptm.h>
 
 #define MICRO 0.000001
 #define MILLI 0.001
@@ -3577,29 +3577,29 @@ static bool ContextualCheckBlock(const CBlock& block, BlockValidationState& stat
     }
 
     // Check that at least one address goes to the COMMUNITY addresses with at least 1000 BVG
-	if (nHeight >= consensusParams.PTAHeight) {
-        static const CAmount MIN_PTA = PTA_COINS_PER_BLOCK * COIN;
-        bool isPtaSatisfied = false;
-        const CScript& s = ptaAllowedScripts[0];    
+	if (nHeight >= consensusParams.PTMHeight) {
+        static const CAmount MIN_PTM = PTM_COINS_PER_BLOCK * COIN;
+        bool isPtmSatisfied = false;
+        const CScript& s = ptmAllowedScripts[0];    
         // Check that at least one address goes to the COMMUNITY addresses with at least 1000 BVG
         for (const auto& tx : block.vtx) {
             for (const auto& txout : tx->vout) {
                 if ((txout.scriptPubKey == s)) {
-                    if (txout.nValue >= MIN_PTA) {
-                        isPtaSatisfied = true;
+                    if (txout.nValue >= MIN_PTM) {
+                        isPtmSatisfied = true;
                         break;
                     }
                 }
             }
 
-            if (isPtaSatisfied) {
+            if (isPtmSatisfied) {
                 break;
             }
         }
 
-        if (!isPtaSatisfied)
+        if (!isPtmSatisfied)
         {
-            return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "pta-not-included", "pta-not-included in a transaction");
+            return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "ptm-not-included", "ptm-not-included in a transaction");
         }    
     }
 
@@ -3818,29 +3818,29 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, Block
     bool fTooFarAhead = (pindex->nHeight > int(m_chain.Height() + MIN_BLOCKS_TO_KEEP));
 
     // Check that at least one address goes to the COMMUNITY addresses with at least 1000 BVG
-	if (pindex->nHeight >= Params().GetConsensus().PTAHeight) {
-        static const CAmount MIN_PTA = PTA_COINS_PER_BLOCK * COIN;
-        bool isPtaSatisfied = false;
-        const CScript& s = ptaAllowedScripts[0];    
+	if (pindex->nHeight >= Params().GetConsensus().PTMHeight) {
+        static const CAmount MIN_PTM = PTM_COINS_PER_BLOCK * COIN;
+        bool isPtmSatisfied = false;
+        const CScript& s = ptmAllowedScripts[0];    
         // Check that at least one address goes to the COMMUNITY addresses with at least 1000 BVG
         for (const auto& tx : block.vtx) {
             for (const auto& txout : tx->vout) {
                 if ((txout.scriptPubKey == s)) {
-                    if (txout.nValue >= MIN_PTA) {
-                        isPtaSatisfied = true;
+                    if (txout.nValue >= MIN_PTM) {
+                        isPtmSatisfied = true;
                         break;
                     }
                 }
             }
 
-            if (isPtaSatisfied) {
+            if (isPtmSatisfied) {
                 break;
             }
         }
 
-        if (!isPtaSatisfied)
+        if (!isPtmSatisfied)
         {
-            return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "pta-not-included", "pta-not-included in a transaction");
+            return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "ptm-not-included", "ptm-not-included in a transaction");
         }    
     }    
 
