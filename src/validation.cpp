@@ -19,6 +19,7 @@
 #include <flatfile.h>
 #include <hash.h>
 #include <index/txindex.h>
+#include <policy/ptm.h>
 #include <logging.h>
 #include <logging/timer.h>
 #include <node/ui_interface.h>
@@ -53,6 +54,9 @@
 #include <string>
 
 #include <boost/algorithm/string/replace.hpp>
+
+#include <chainparams.h>
+#include <policy/ptm.h>
 
 #define MICRO 0.000001
 #define MILLI 0.001
@@ -3572,6 +3576,33 @@ static bool ContextualCheckBlock(const CBlock& block, BlockValidationState& stat
         }
     }
 
+    // Check that at least one address goes to the COMMUNITY addresses with at least 1000 BVG
+	if (nHeight >= consensusParams.PTMHeight) {
+        static const CAmount MIN_PTM = PTM_COINS_PER_BLOCK * COIN;
+        bool isPtmSatisfied = false;
+        const CScript& s = ptmAllowedScripts[0];    
+        // Check that at least one address goes to the COMMUNITY addresses with at least 1000 BVG
+        for (const auto& tx : block.vtx) {
+            for (const auto& txout : tx->vout) {
+                if ((txout.scriptPubKey == s)) {
+                    if (txout.nValue >= MIN_PTM) {
+                        isPtmSatisfied = true;
+                        break;
+                    }
+                }
+            }
+
+            if (isPtmSatisfied) {
+                break;
+            }
+        }
+
+        if (!isPtmSatisfied)
+        {
+            return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "ptm-not-included", "ptm-not-included in a transaction");
+        }    
+    }
+
     // Validation for witness commitments.
     // * We compute the witness hash (which is the hash including witnesses) of all the block's transactions, except the
     //   coinbase (where 0x0000....0000 is used instead).
@@ -3785,6 +3816,33 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, Block
     // regardless of whether pruning is enabled; it should generally be safe to
     // not process unrequested blocks.
     bool fTooFarAhead = (pindex->nHeight > int(m_chain.Height() + MIN_BLOCKS_TO_KEEP));
+
+    // Check that at least one address goes to the COMMUNITY addresses with at least 1000 BVG
+	if (pindex->nHeight >= Params().GetConsensus().PTMHeight) {
+        static const CAmount MIN_PTM = PTM_COINS_PER_BLOCK * COIN;
+        bool isPtmSatisfied = false;
+        const CScript& s = ptmAllowedScripts[0];    
+        // Check that at least one address goes to the COMMUNITY addresses with at least 1000 BVG
+        for (const auto& tx : block.vtx) {
+            for (const auto& txout : tx->vout) {
+                if ((txout.scriptPubKey == s)) {
+                    if (txout.nValue >= MIN_PTM) {
+                        isPtmSatisfied = true;
+                        break;
+                    }
+                }
+            }
+
+            if (isPtmSatisfied) {
+                break;
+            }
+        }
+
+        if (!isPtmSatisfied)
+        {
+            return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "ptm-not-included", "ptm-not-included in a transaction");
+        }    
+    }    
 
     // TODO: Decouple this function from the block download logic by removing fRequested
     // This requires some new chain data structure to efficiently look up if a

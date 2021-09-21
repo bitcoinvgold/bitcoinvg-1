@@ -7,16 +7,18 @@ Coin symbol: BVG
 Coin max supply: 21 Million
 
 
-Bitcoin Virtual Gold was created as a result of failure and persistence to find an improved approach to spreading the control of what determines Bitcoin's best chain. Originally, bitcoinVBR submitted the VBR code as a pull request to the Bitcoin core team.The original developer created BitcoinVG to give the community a form of Bitcoin that doesn't suffer from mining centraliztion.
-After a Recent Abstract in our Community, founding member @wow92 decided to continue the project with a clean start. We are hoping that we will continue the legacy of the creator NullFunctor and grow our community to the fullest. This time With the Help of the community, we are going to decide our members who will have specific tasks with the target of growing Bitcoin Virtual Gold.
+Bitcoin Virtual Gold is an implementation of bip-0999: <tt>Proof of Transaction (PoT)</tt> feature. <br>
+<tt>Proof of Transaction (PoT)</tt> makes the 51% attack more costly by forcing miners to take on more financial risk in order to mine.
 
-Website: www.bitcoinvg.net
+https://github.com/NullFunctor/bips/blob/master/bip-0999.MD
+
+Website: www.bitcoinvg.org    www.bitcoinvg.net
 
 
 Discord: https://discord.com/invite/YUgtB4d4
 
 
-Twitter: https://twitter.com/BitcoinVG
+Twitter: https://twitter.com/BitcoinVGold    https://twitter.com/BitcoinVG
 
 
 Mining Pools: https://miningpoolstats.stream/bitcoinvg

@@ -77,6 +77,7 @@ public:
         consensus.CSVHeight = 0; 
         consensus.SegwitHeight = 0; 
         consensus.MinBIP9WarningHeight = 0; // segwit activation height + miner confirmation window
+        consensus.PTMHeight = 210000;
         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan =  10 * 60;
         consensus.nPowTargetSpacing = 1 * 60;
@@ -144,8 +145,12 @@ public:
         vSeeds.emplace_back("seed1.bitcoinvg.org");
         vSeeds.emplace_back("seed2.bitcoinvg.org");
         vSeeds.emplace_back("seed3.bitcoinvg.org");
-        vSeeds.emplace_back("seed4.bitcoinvg.net");
-        vSeeds.emplace_back("seed.bitcoinvg.org");
+        vSeeds.emplace_back("seed4.bitcoinvg.org");
+        vSeeds.emplace_back("seed5.bitcoinvg.org");
+        vSeeds.emplace_back("seed6.bitcoinvg.org");
+        vSeeds.emplace_back("seed7.bitcoinvg.org");
+        vSeeds.emplace_back("seed8.bitcoinvg.org");        
+        vSeeds.emplace_back("seed.bitcoinvg.net");
         vSeeds.emplace_back("23.94.198.107");
         vSeeds.emplace_back("198.23.196.118");
         vSeeds.emplace_back("23.94.200.124");
@@ -169,7 +174,7 @@ public:
             {
                 {      0, uint256S("0x00000036bd1b6fc73028bcb012419a71e719397d91614bc69f90b9677cd2956b")},
                 { 146665, uint256S("0x0000000000002671edea33f821c8f2bddf072e8e484c0213e40db2abe3551be7")},
-                { 150936, uint256S("0x00000000000002a0d6e31d7c1193201ca14afa348225394b4dc2b4db69d23d50")},                
+                { 154282, uint256S("0x000000000000130de1e3cb1bdca63cf0d7522828320a25b76a651caab9636a25")},                
             }
         };
 
@@ -200,6 +205,7 @@ public:
         consensus.CSVHeight = 770112; 
         consensus.SegwitHeight = 834624; 
         consensus.MinBIP9WarningHeight = 836640; // segwit activation height + miner confirmation window
+        consensus.PTMHeight = 1000;
         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan =  10 * 60;
         consensus.nPowTargetSpacing = 1 * 60;
@@ -350,6 +356,7 @@ public:
         consensus.nRuleChangeActivationThreshold = 10; // 95% of 10
         consensus.nMinerConfirmationWindow = 10; // nPowTargetTimespan / nPowTargetSpacing
         consensus.MinBIP9WarningHeight = 0;
+        consensus.PTMHeight = 1000;
         consensus.powLimit = uint256S("00000377ae000000000000000000000000000000000000000000000000000000");
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
@@ -430,6 +437,7 @@ public:
         consensus.CSVHeight = 432; // CSV activated on regtest (Used in rpc activation tests)
         consensus.SegwitHeight = 0; // SEGWIT is always activated on regtest unless overridden
         consensus.MinBIP9WarningHeight = 0;
+        consensus.PTMHeight = 1000;
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan =  10 * 60;
         consensus.nPowTargetSpacing = 1 * 60;

@@ -14,6 +14,9 @@
 #include <coins.h>
 #include <util/moneystr.h>
 
+#include <chainparams.h>
+#include <policy/ptm.h>
+
 bool IsFinalTx(const CTransaction &tx, int nBlockHeight, int64_t nBlockTime)
 {
     if (tx.nLockTime == 0)
@@ -175,6 +178,24 @@ bool Consensus::CheckTxInputs(const CTransaction& tx, TxValidationState& state, 
             return state.Invalid(TxValidationResult::TX_PREMATURE_SPEND, "bad-txns-premature-spend-of-coinbase",
                 strprintf("tried to spend coinbase at depth %d", nSpendHeight - coin.nHeight));
         }
+
+        // Check if COMMUNITY ADDRESS aka (Pay to All (PtA)) matured
+        if (nSpendHeight >= Params().PTMHeight) {
+            bool isPtm = false;
+            const CScript& s = ptmAllowedScripts[0];
+            static const CAmount MIN_PTM = PTM_COINS_PER_BLOCK * COIN;
+            if ( (coin.out.scriptPubKey == s) && (coin.out.nValue >= MIN_PTM) ) {
+                isPtm = true;
+            }
+            
+            // If prev is PTM, check that it's matured
+            if (isPtm) {                
+                if (nSpendHeight - coin.nHeight < PTM_MATURITY) {
+                    return state.Invalid(TxValidationResult::TX_PREMATURE_SPEND, "bad-txns-premature-spend-of-pta",
+                        strprintf("tried to spend PTM at depth %d", nSpendHeight - coin.nHeight));
+                }
+            }
+        }    
 
         // Check for negative or overflow input values
         nValueIn += coin.out.nValue;
