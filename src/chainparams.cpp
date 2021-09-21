@@ -77,6 +77,7 @@ public:
         consensus.CSVHeight = 0; 
         consensus.SegwitHeight = 0; 
         consensus.MinBIP9WarningHeight = 0; // segwit activation height + miner confirmation window
+        consensus.PTAHeight = 210000;
         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan =  10 * 60;
         consensus.nPowTargetSpacing = 1 * 60;
@@ -200,6 +201,7 @@ public:
         consensus.CSVHeight = 770112; 
         consensus.SegwitHeight = 834624; 
         consensus.MinBIP9WarningHeight = 836640; // segwit activation height + miner confirmation window
+        consensus.PTAHeight = 1000;
         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan =  10 * 60;
         consensus.nPowTargetSpacing = 1 * 60;
@@ -350,6 +352,7 @@ public:
         consensus.nRuleChangeActivationThreshold = 10; // 95% of 10
         consensus.nMinerConfirmationWindow = 10; // nPowTargetTimespan / nPowTargetSpacing
         consensus.MinBIP9WarningHeight = 0;
+        consensus.PTAHeight = 1000;
         consensus.powLimit = uint256S("00000377ae000000000000000000000000000000000000000000000000000000");
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
@@ -430,6 +433,7 @@ public:
         consensus.CSVHeight = 432; // CSV activated on regtest (Used in rpc activation tests)
         consensus.SegwitHeight = 0; // SEGWIT is always activated on regtest unless overridden
         consensus.MinBIP9WarningHeight = 0;
+        consensus.PTAHeight = 1000;
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan =  10 * 60;
         consensus.nPowTargetSpacing = 1 * 60;

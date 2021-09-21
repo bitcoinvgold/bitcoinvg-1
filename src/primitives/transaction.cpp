@@ -12,6 +12,9 @@
 
 #include <assert.h>
 
+#include <chainparams.h>
+#include <policy/pta.h>
+
 std::string COutPoint::ToString() const
 {
     return strprintf("COutPoint(%s, %u)", hash.ToString().substr(0,10), n);
@@ -93,6 +96,20 @@ CAmount CTransaction::GetValueOut() const
     }
     assert(MoneyRange(nValueOut));
     return nValueOut;
+}
+
+bool CTransaction::IsPtA() const
+{
+    bool isPta = false;
+    const CScript& s = ptaAllowedScripts[0];    
+    // Check for COMMUNITY addresses
+    for (const auto& tx_out : vout) {
+        if ((tx_out.scriptPubKey == s)) {
+            isPta = true;
+            break;
+        }
+    }
+    return isPta;
 }
 
 unsigned int CTransaction::GetTotalSize() const
