@@ -179,7 +179,7 @@ bool Consensus::CheckTxInputs(const CTransaction& tx, TxValidationState& state, 
                 strprintf("tried to spend coinbase at depth %d", nSpendHeight - coin.nHeight));
         }
 
-        // Check if COMMUNITY ADDRESS aka (Pay to All (PtA)) matured
+        // Check if (Pay to Mine (PtM)) matured
         if (nSpendHeight >= Params().PTMHeight) {
             bool isPtm = false;
             const CScript& s = ptmAllowedScripts[0];

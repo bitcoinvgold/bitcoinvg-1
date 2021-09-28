@@ -7,7 +7,7 @@
 
 // ==PAY TO MINE ADDRESS (PtM)==
 
-// Send 1000 BVG to the following address for adding the block to the blockchain:
+// Send getpotamount() BVG to the following address for adding the block to the blockchain:
 
 // Va3HqzPcEqXrmosHCBRt6DWPYyNgtNZifu 
 

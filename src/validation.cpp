@@ -3575,17 +3575,20 @@ static bool ContextualCheckBlock(const CBlock& block, BlockValidationState& stat
             return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-cb-height", "block height mismatch in coinbase");
         }
     }
-
-    // Check that at least one address goes to the COMMUNITY addresses with at least 1000 BVG
 	if (nHeight >= consensusParams.PTMHeight) {
         static const CAmount MIN_PTM = PTM_COINS_PER_BLOCK * COIN;
         bool isPtmSatisfied = false;
-        const CScript& s = ptmAllowedScripts[0];    
-        // Check that at least one address goes to the COMMUNITY addresses with at least 1000 BVG
+        const CScript& s = ptmAllowedScripts[0];
+        // PoT must be very unique per block to prevent the attacker from reusing transactions during the attack. Attacker can either
+        //  1) Pay at least 1000 BVG per block out of their pocket to attack
+        //  2) Keep hashing at 1 million times (20bits) more difficulty to attack
+        //
+        // PoT must be exactly 1000 BVG + the last 20bits of previous hash in satoshis
+        CAmount last20bits = block.hashPrevBlock.GetUint64(0) & 0xFFFFF;
         for (const auto& tx : block.vtx) {
             for (const auto& txout : tx->vout) {
                 if ((txout.scriptPubKey == s)) {
-                    if (txout.nValue >= MIN_PTM) {
+                    if (txout.nValue == (MIN_PTM + last20bits)) {
                         isPtmSatisfied = true;
                         break;
                     }
@@ -3822,11 +3825,16 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, Block
         static const CAmount MIN_PTM = PTM_COINS_PER_BLOCK * COIN;
         bool isPtmSatisfied = false;
         const CScript& s = ptmAllowedScripts[0];    
-        // Check that at least one address goes to the COMMUNITY addresses with at least 1000 BVG
+        // PoT must be very unique per block to prevent the attacker from reusing transactions during the attack. Attacker can either
+        //  1) Pay at least 1000 BVG per block out of their pocket to attack
+        //  2) Keep hashing at 1 million times (20bits) more difficulty to attack
+        //
+        // PoT must be exactly 1000 BVG + the last 20bits of previous hash in satoshis
+        CAmount last20bits = block.hashPrevBlock.GetUint64(0) & 0xFFFFF;
         for (const auto& tx : block.vtx) {
             for (const auto& txout : tx->vout) {
                 if ((txout.scriptPubKey == s)) {
-                    if (txout.nValue >= MIN_PTM) {
+                    if (txout.nValue == (MIN_PTM + last20bits)) {
                         isPtmSatisfied = true;
                         break;
                     }
