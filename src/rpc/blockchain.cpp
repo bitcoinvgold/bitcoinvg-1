@@ -1379,6 +1379,40 @@ struct CompareBlocksByHeight
     }
 };
 
+static RPCHelpMan getpotamount()
+{
+    return RPCHelpMan{"getpotamount",
+                "\nReturns the exact Proof of Transaction (PoT) amount of BVG needed to mine the next block in the chain.\n"
+                "\nProof of Transaction (PoT)\n"
+                "\nSend getpotamount() BVG to the following address for adding the block to the blockchain:\n"
+                    "\nVa3HqzPcEqXrmosHCBRt6DWPYyNgtNZifu\n"
+                "\nCOMMUNITY ADDRESS (PtA)\n"
+                "\n// Your public key is: VoFic4mkn6zchpTuuY27MPonQ9fYKFQNc6\n"
+                "\n// Receive BVG to your wallet using your PUBLIC key.\n"
+                "\n// Your private key is: 7dyZt1JhdNrbJY4RybjBWYiALbHmHiV1Tz6VhLWp9Xb5s8XDEkU\n"
+                "\n// Access BVG in your wallet using your PRIVATE key.\n",
+                {},
+                RPCResult{
+                    RPCResult::Type::NUM, "", "The amount of BVG for PoT"},
+                RPCExamples{
+                    HelpExampleCli("getpotamount", "")
+            + HelpExampleRpc("getpotamount", "")
+                },
+        [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
+{
+    LOCK(cs_main);
+
+    CBlockIndex* pblockindex = ::ChainActive().Tip();
+    CAmount last20bits =  pblockindex->GetBlockHeader().GetHash().GetUint64(0) & 0xFFFFF;
+
+    static const CAmount MIN_PTM = PTM_COINS_PER_BLOCK * COIN;
+    
+    return (MIN_PTM + last20bits)*0.00000001;
+},
+    };
+}
+
+
 static RPCHelpMan getchaintips()
 {
     return RPCHelpMan{"getchaintips",
@@ -2476,6 +2510,7 @@ static const CRPCCommand commands[] =
     { "blockchain",         "getblockhash",           &getblockhash,           {"height"} },
     { "blockchain",         "getblockheader",         &getblockheader,         {"blockhash","verbose"} },
     { "blockchain",         "getchaintips",           &getchaintips,           {} },
+    { "blockchain",         "getpotamount",           &getpotamount,           {} },
     { "blockchain",         "getdifficulty",          &getdifficulty,          {} },
     { "blockchain",         "getmempoolancestors",    &getmempoolancestors,    {"txid","verbose"} },
     { "blockchain",         "getmempooldescendants",  &getmempooldescendants,  {"txid","verbose"} },

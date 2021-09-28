@@ -98,20 +98,6 @@ CAmount CTransaction::GetValueOut() const
     return nValueOut;
 }
 
-bool CTransaction::IsPtA() const
-{
-    bool isPtm = false;
-    const CScript& s = ptmAllowedScripts[0];    
-    // Check for COMMUNITY addresses
-    for (const auto& tx_out : vout) {
-        if ((tx_out.scriptPubKey == s)) {
-            isPtm = true;
-            break;
-        }
-    }
-    return isPtm;
-}
-
 unsigned int CTransaction::GetTotalSize() const
 {
     return ::GetSerializeSize(*this, PROTOCOL_VERSION);
